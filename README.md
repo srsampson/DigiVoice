@@ -59,3 +59,7 @@ Always returns the number 4.
 int codec2_samples_per_frame(void);
 ```
 Always returns the number 320.
+```
+float codec2_get_energy(uint16_t []);
+```
+Returns the mean energy of the given buffer of indexed quantized integers.
