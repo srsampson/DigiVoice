@@ -1,4 +1,4 @@
-#### An implementation of the Codec2 Mode 700C Speech Vocoder
+#### An implementation of a Digital Voice Speech Vocoder
 This is a highly modified implementation of the Codec2 Mode 700C Speech Vocoder. It is written in C99 using complex float, the ```-O2``` optimization, and ```-fsingle-precision-constant``` enabled. It was developed and compiled using Netbeans 8.2 and an export ```ZIP``` containing the build is included. You should be able to burst this file on a Raspberry Pi and type ```make```. It also should be 32-bit compatible but I haven't tested that yet.
 
 This speech vocoder converts a block of 320 16-bit signed PCM integers sampled at 8 kHz, into an array of four (4) unsigned 16 bit integers which contain the quantized version of the compressed speech, and vice-versa, every 40 ms, or a 25 Hz rate.
