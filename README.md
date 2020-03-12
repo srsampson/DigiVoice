@@ -3,7 +3,7 @@ This is a highly modified implementation of the Codec2 Mode 700C Speech Vocoder.
 
 This speech vocoder converts a block of 320 16-bit signed PCM integers sampled at 8 kHz, into an array of four (4) unsigned 16 bit integers which contain the quantized version of the compressed speech, and vice-versa, every 40 ms, or a 25 Hz rate.
 
-The software is provided as a dynamic library ```libcodec2-700c.so``` and you should add it to your ```/usr/local/lib``` directory, and also include the ```codec2-700.h``` and ```c3file-700.h``` files in your ```/usr/local/include``` and perform a ```sudo ldconfig``` to make sure your Linux library references are updated.
+The software is provided as a dynamic library ```libdigivoice.so``` and you should add it to your ```/usr/local/lib``` directory, and also include the ```digivoice.h``` and ```c3file.h``` files in your ```/usr/local/include``` and perform a ```sudo ldconfig``` to make sure your Linux library references are updated.
 
 Also included, are a sample ```encode``` and ```decode``` programs, and a test voice ```raw``` file.
 
@@ -34,32 +34,32 @@ A Pitch of 0 means it is an unvoiced frame
 ```
 #### Library Calls
 ```
-int codec2_create(void);
+int codec_create(void);
 ```
 Returns 0 on success, -1 if the Sinusoidal process init fails, and -2 if the Non Linear Pitch (NLP) init fails
 ```
-void codec2_destroy(void);
+void codec_destroy(void);
 ```
 Always call this function before ending vocoder processing, which releases allocated memory.
 ```
-void codec2_encode(uint16_t [], int16_t []);
+void codec_encode(uint16_t [], int16_t []);
 ```
 Called with a buffer of 320 16-bit signed PCM samples with an 8 kHz sample rate.   
 Returns a buffer of four indexed integers containing quantized speech-vocoder data.
 ```
-void codec2_decode(int16_t [], uint16_t []);
+void codec_decode(int16_t [], uint16_t []);
 ```
 Called with a buffer of four indexed integers of quantized speech-vocoder data.   
 Returns a buffer of 320 16-bit signed PCM samples with an 8 kHz sample rate.
 ```
-int codec2_indexes_per_frame(void);
+int codec_indexes_per_frame(void);
 ```
 Always returns the number 4.
 ```
-int codec2_samples_per_frame(void);
+int codec_samples_per_frame(void);
 ```
 Always returns the number 320.
 ```
-float codec2_get_energy(uint16_t []);
+float codec_get_energy(uint16_t []);
 ```
 Returns the mean energy of the given buffer of indexed quantized integers.

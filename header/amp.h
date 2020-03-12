@@ -18,7 +18,7 @@ extern "C" {
 #include <complex.h>
 #include <stdint.h>
     
-#include "codec2-700.h"
+#include "digivoice.h"
 #include "defines.h"
 #include "fft.h"
 

@@ -17,15 +17,15 @@ extern "C" {
 
 #include <stdint.h>
 
-int codec2_create(void);
-void codec2_destroy(void);
+int codec_create(void);
+void codec_destroy(void);
 
-void codec2_encode(uint16_t [], int16_t []);
-void codec2_decode(int16_t [], uint16_t []);
-float codec2_get_energy(uint16_t []);
+void codec_encode(uint16_t [], int16_t []);
+void codec_decode(int16_t [], uint16_t []);
+float codec_get_energy(uint16_t []);
 
-int codec2_indexes_per_frame(void);
-int codec2_samples_per_frame(void);
+int codec_indexes_per_frame(void);
+int codec_samples_per_frame(void);
 
 #ifdef __cplusplus
 }

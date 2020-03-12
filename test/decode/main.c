@@ -4,8 +4,8 @@
 #include <string.h>
 #include <errno.h>
 
-#include <codec2-700.h>
-#include <c3file-700.h>
+#include <digivoice.h>
+#include <c3file.h>
 
 int main(int argc, char *argv[]) {
     struct c3_header in_hdr;
@@ -57,14 +57,14 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    if ((stat = codec2_create()) == 0) {
-        int nsam = codec2_samples_per_frame();
-        int narray = codec2_indexes_per_frame();
+    if ((stat = codec_create()) == 0) {
+        int nsam = codec_samples_per_frame();
+        int narray = codec_indexes_per_frame();
         uint16_t indexes[narray];
         int16_t speech[nsam];
         
         while (fread(indexes, sizeof (uint16_t), narray, fin) == narray) {
-            codec2_decode(speech, indexes);
+            codec_decode(speech, indexes);
 
             fwrite(speech, sizeof (int16_t), nsam, fout);
 
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
                 fflush(stdin);
         }
 
-        codec2_destroy();
+        codec_destroy();
     }
 
     fclose(fin);

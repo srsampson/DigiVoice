@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include <math.h>
 
-#include "codec2-700.h"
+#include "digivoice.h"
 #include "defines.h"
 #include "sine.h"
 #include "encode.h"
