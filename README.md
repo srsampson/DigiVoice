@@ -7,6 +7,8 @@ The software is provided as a dynamic library ```libdigivoice.so``` and you shou
 
 Also included, are a sample ```encode``` and ```decode``` programs, and a test voice ```raw``` file.
 
+This version does not use packed bytes as in the original. Since the vocoder bits are not going to be transmitted as-is, I kept the indexed format. In this way, the bits can be easily added to the modem data structure, and no pack and unpack gymnastics are needed.
+
 #### Simplified Theory
 The program operates on blocks of PCM audio that is sampled at 8 kHz into 15-bits plus sign. A block of 320 samples (equivalent to 40ms) is then analyzed as four segments of 80 samples (10ms).
 
