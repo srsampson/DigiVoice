@@ -1225,7 +1225,8 @@ static void phase_synth_zero_order(MODEL *model) {
         if (model->voiced == true) {
             ex[m] = cmplx((float) m * Sine_ex_phase);
         } else {
-            ex[m] = cmplx(TAU * (float) codec2_rand() / CODEC2_RND_MAX);
+            /* pick a random point on the circle */
+            ex[m] = cmplx(TAU / CODEC2_RND_MAX * (float) codec2_rand());
         }
 
         /* filter using LPC filter */
@@ -1410,6 +1411,8 @@ static void postfilter(MODEL *decode_model) {
 
     e = 10.0f * log10f(e / decode_model->L);
 
+    /* filter the running threshold */
+    
     if ((e < BG_THRESH) && (decode_model->voiced == false))
         Sine_bg_est *= (1.0f - BG_BETA) + e * BG_BETA;
 
@@ -1417,8 +1420,10 @@ static void postfilter(MODEL *decode_model) {
 
     if (decode_model->voiced == true) {
         for (int i = 1; i <= decode_model->L; i++) {
+            /* for mean values below threshold randomize the phase */
             if (decode_model->A[i] < thresh) {
-                decode_model->phi[i] = (TAU * (float) codec2_rand() / CODEC2_RND_MAX);
+                /* pick a random point on the circle */
+                decode_model->phi[i] = (TAU / CODEC2_RND_MAX * (float) codec2_rand());
             }
         }
     }
