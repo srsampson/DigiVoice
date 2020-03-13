@@ -17,15 +17,15 @@ extern "C" {
 
 #include "defines.h"
 
-#define COEFF       .95f  /* notch filter parameter               */
-#define DEC         5     /* decimation factor                    */
-#define CNLP        .3f   /* post processor constant              */
-#define NLP_NTAP    48    /* Decimation LPF order */
+#define COEFF       0.9497f /* notch filter parameter .95 in binary */
+#define DEC         5       /* decimation factor                    */
+#define CNLP        .3f     /* post processor constant              */
+#define NLP_NTAP    48      /* Decimation LPF order                 */
 #define MIN_BIN     (FFT_SIZE * DEC / P_MAX)    /* 16 */
 
 int nlp_create(void);
 void nlp_destroy(void);
-float nlp(float []);
+int nlp(float []);
 
 #ifdef __cplusplus
 }

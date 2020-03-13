@@ -25,7 +25,7 @@ extern "C" {
 #define SIXTY               (TAU * 60.0f / FS)          /* 0.001193663 */
 #define NS                  (PHASE_FFT_SIZE / 2 + 1)    /* 65 (0 - 64) */
 #define SCALE               (20.0f / logf(10.0f))
-#define FRACTPI             (0.9497 * M_PI) /* 0.95 in binary */
+#define FRACTPI             (0.9497f * M_PI) /* 0.95 in binary */
     
 #define CODEC2_RND_MAX      32767.0f
 

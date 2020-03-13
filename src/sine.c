@@ -9,6 +9,7 @@
  * See LICENSE file for information
  */
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
 #include <complex.h>
@@ -1119,9 +1120,9 @@ void analyze_one_frame(MODEL *encode_model, int16_t speech[]) {
 
     fftr(Sine_fftr_fwd_cfg, sw, Sine_Sw);
 
-    encode_model->Wo = TAU / nlp(Sine_Sn);    // nlp returns pitch
+    encode_model->Wo = TAU / nlp(Sine_Sn);      // nlp returns pitch as int
     encode_model->L = M_PI / encode_model->Wo;
-
+    
     /* fill-in the model values */
 
     two_stage_pitch_refinement(encode_model);   // operates on Sine_Sw

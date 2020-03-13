@@ -39,8 +39,8 @@ extern "C" {
 /* Pitch estimation defines */
 
 #define M_PITCH         320     /* pitch analysis frame size            */
-#define P_MIN           20      /* minimum pitch                        */
-#define P_MAX           160     /* maximum pitch                        */
+#define P_MIN           20      /* minimum pitch in samples             */
+#define P_MAX           160     /* maximum pitch in samples             */
 
 #define cmplx(value) (cosf(value) + sinf(value) * I)
 #define cmplxconj(value) (cosf(value) + sinf(value) * -I)

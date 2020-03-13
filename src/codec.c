@@ -76,14 +76,12 @@ void codec_encode(uint16_t index[], int16_t speech[]) {
     /*
      * Convert the model into the indexed bits
      */
-    
     amp_model_to_index(index, &Encode_model);
 }
 
 /*
  * Decodes array of indexed bits into 320 samples of speech (40ms)
  */
-
 void codec_decode(int16_t speech[], uint16_t index[]) {
 
     amp_index_to_models(Decode_models, index);
@@ -97,7 +95,6 @@ void codec_decode(int16_t speech[], uint16_t index[]) {
  * Decodes energy value from encoded bits
  * Jeroen Vreeken, 2017
  */
-
 float codec_get_energy(uint16_t index[]) {
     float mean = decode_energy(index[2]) - 10.0f;
 

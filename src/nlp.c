@@ -17,7 +17,7 @@
 #include "fft.h"
 
 static float cnormf(complex float);
-static float post_process_sub_multiples(float [], float, int);
+static int post_process_sub_multiples(float [], float, int);
 
 static const float Nlp_cosw[] = {   // Verified [srs]
     0.000000f,
@@ -143,7 +143,7 @@ static float Nlp_sq[M_PITCH];       // 320
 static float Nlp_mem_x;
 static float Nlp_mem_y;
 static float Nlp_mem_fir[NLP_NTAP]; // 48
-static float Nlp_prev_f0;
+static int Nlp_prev_f0;
 
 static fft_cfg Nlp_fft_cfg;
 
@@ -159,8 +159,6 @@ int nlp_create() {
         return -1;
     }
 
-    Nlp_prev_f0 = 1.0f / 0.0200f;
-
     return 0;
 }
 
@@ -168,7 +166,7 @@ void nlp_destroy() {
     free(Nlp_fft_cfg);
 }
 
-float nlp(float Sn[]) {
+int nlp(float Sn[]) {
     complex float Fw[FFT_SIZE];
     float fw[FFT_SIZE];
     
@@ -227,9 +225,9 @@ float nlp(float Sn[]) {
         }
     }
 
-    float best_f0 = post_process_sub_multiples(fw, gmax, gmax_bin);
+    /* Save as previous on next pass */
     
-    Nlp_prev_f0 = best_f0;
+    Nlp_prev_f0 = post_process_sub_multiples(fw, gmax, gmax_bin);
     
     /* Shift samples in buffer to make room for new samples */
 
@@ -239,10 +237,10 @@ float nlp(float Sn[]) {
 
     /* return pitch */
 
-    return (float) FS / best_f0;
+    return FS / Nlp_prev_f0;
 }
 
-static float post_process_sub_multiples(float fw[], float gmax, int gmax_bin) {
+static int post_process_sub_multiples(float fw[], float gmax, int gmax_bin) {
     float thresh;
     int mult = 2;
     int cmax_bin = gmax_bin;
@@ -286,5 +284,5 @@ static float post_process_sub_multiples(float fw[], float gmax, int gmax_bin) {
         mult++;
     }
 
-    return (float) (cmax_bin * FS / (FFT_SIZE * DEC));
+    return cmax_bin * (FS / (FFT_SIZE * DEC));
 }
