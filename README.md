@@ -5,6 +5,8 @@ This speech vocoder converts a block of 320 16-bit signed PCM integers sampled a
 
 The software is provided as a dynamic library ```libdigivoice.so``` and you should add it to your ```/usr/local/lib``` directory, and also include the ```digivoice.h``` and ```c3file.h``` files in your ```/usr/local/include``` and perform a ```sudo ldconfig``` to make sure your Linux library references are updated.
 
+The library is not thread safe. Currently it can only be used in half-duplex mode, and not full-duplex.
+
 Also included, are a sample ```encode``` and ```decode``` programs, and a test voice ```raw``` file.
 
 This version does not use packed bytes as in the original. Since the vocoder bits are not going to be transmitted as-is, I kept the indexed format. In this way, the bits can be easily added to the modem data structure, and no pack and unpack gymnastics are needed.
