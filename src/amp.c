@@ -58,7 +58,7 @@ static float Amp_freqs_kHz[] = {    // Verified [srs]
 
 /* postfilter 20 * log10(freq / 0.3) */
 
-static float Amp_pre[] = {
+static float Amp_pre[] = {    // Verified [srs]
     -3.529820f,
     -0.654534f,
     1.666803f,
@@ -212,7 +212,6 @@ void amp_index_to_models(MODEL models[], uint16_t index[]) {
  * A post filter is the key to the (relatively) high quality at such low bit rates.
  * The way it works is a little mysterious - and also a good topic for research.
  */
-
 static void post_filter_amp(float vec[]) {
     float e_before = 0.0f;
     float e_after = 0.0f;

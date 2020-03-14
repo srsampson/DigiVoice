@@ -24,9 +24,8 @@ extern "C" {
 
 #define AMP_K               20  /* rate K vector length                            */
 #define AMP_M               512 /* number of elements in codebook                  */
-#define MBEST_ENTRIES       5   /* how many candidates we keep for each stage      */
+#define MBEST_ENTRIES       5   /* how many candidates we keep for each VQ stage   */
     
-void amp_sample_freqs_kHz(void);
 void amp_model_to_index(uint16_t index[], MODEL *model);
 void amp_index_to_models(MODEL [], uint16_t []);
 

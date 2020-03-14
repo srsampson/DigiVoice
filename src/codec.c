@@ -63,7 +63,6 @@ int codec_samples_per_frame() {
  * index[2] = energy        (4 bits)
  * index[3] = pitch         (6 bits)
  */
-
 void codec_encode(uint16_t index[], int16_t speech[]) {
     /*
      * Process each 10 ms segment and update model
