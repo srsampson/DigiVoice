@@ -57,6 +57,9 @@ int codec_samples_per_frame() {
  * speech into an array index of bits.
  * 
  * 40ms segments, or at a 25 Hz rate
+ * 
+ * The indexed values are encoded into 16 bits:
+ * [xxxx | yyyy yyyy yyyy ] Where x = #bits and y = the bits
  *
  * index[0] = VQ magnitude1 (9 bits)
  * index[1] = VQ magnitude2 (9 bits)
@@ -94,12 +97,20 @@ void codec_decode(int16_t speech[], uint16_t index[]) {
  * Decodes energy value from encoded bits
  * Jeroen Vreeken, 2017
  */
-float codec_get_energy(uint16_t index[]) {
-    float mean = decode_energy(index[2]) - 10.0f;
+float codec_get_energy(uint16_t index[]) {   
+    int bits = index[2] >> 12;
+    int mask = (1 << bits) - 1;    
+    int energy = index[2] & mask;  // Energy
+    
+    bits = index[3] >> 12;
+    mask = (1 << bits) - 1;    
+    int pitch = index[3] & mask;  // Pitch
+    
+    float mean = decode_energy(energy) - 10.0f;
 
     /* Decrease mean if unvoiced */
 
-    if (index[3] == 0) // pitch == 0 means unvoiced
+    if (pitch == 0) // pitch == 0 means unvoiced
         mean -= 10.0f;
 
     return powf(10.0f, mean / 10.0f);

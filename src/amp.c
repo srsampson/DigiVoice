@@ -21,9 +21,6 @@
 #include "mbest.h"
 #include "amp.h"
 
-extern const float codebook1[];
-extern const float codebook2[];
-
 static void rate_K_mbest_encode(float [], uint16_t []);
 static void interp_para(float [], float [], float [], int, float [], int);
 static void resample_const_rate_f(float [], MODEL *);
@@ -31,7 +28,7 @@ static void post_filter_amp(float []);
 static void interp_Wo_v(float [], int [], bool [], float, bool);
 static void resample_rate_L(MODEL *, int);
 static void determine_phase(MODEL *);
-static void amp_index_to_rate_K_vec(float [], uint16_t []);
+static void amp_index_to_rate_K_vec(float [], int, int, int);
 
 static float Amp_freqs_kHz[] = {    // Verified [srs]
     0.199816f,
@@ -90,6 +87,9 @@ static bool Amp_voicing_left;
  * Quantize the model parameters into indexed bits
  * This is the data that will be transmitted across the medium
  * 
+ * The indexed values are encoded into 16 bits:
+ * [xxxx | yyyy yyyy yyyy ] Where x = #bits and y = the bits
+ * 
  * index[0] = VQ magnitude1 (9 bits)
  * index[1] = VQ magnitude2 (9 bits)
  * index[2] = energy        (4 bits)
@@ -115,7 +115,7 @@ void amp_model_to_index(uint16_t index[], MODEL *model) {
     
     /* scalar quantize mean (effectively the frame energy) */
 
-    index[2] = encode_energy(mean);     // energy 4 bits
+    index[2] = (4 << 12) | encode_energy(mean);     // energy 4 bits
     
     for (int k = 0; k < AMP_K; k++) {
         vec_no_mean[k] = vec[k] - mean;
@@ -134,9 +134,9 @@ void amp_model_to_index(uint16_t index[], MODEL *model) {
             pitch = 1;
         }
 
-        index[3] = pitch;       // pitch 6 bits
+        index[3] = (6 << 12) | pitch;       // pitch 6 bits
     } else {
-        index[3] = 0;
+        index[3] = (6 << 12) | 0;
     }
 }
 
@@ -146,16 +146,32 @@ void amp_model_to_index(uint16_t index[], MODEL *model) {
 void amp_index_to_models(MODEL models[], uint16_t index[]) {
     float vec_[AMP_K];
 
+    int bits = index[0] >> 12;
+    int mask = (1 << bits) - 1;
+    int n1 = index[0] & mask;  // VQ1 Magnitude
+    
+    bits = index[1] >> 12;
+    mask = (1 << bits) - 1;    
+    int n2 = index[1] & mask;  // VQ2 Magnitude
+    
+    bits = index[2] >> 12;
+    mask = (1 << bits) - 1;    
+    int energy = index[2] & mask;  // Energy
+
+    bits = index[3] >> 12;
+    mask = (1 << bits) - 1;    
+    int pitch = index[3] & mask;  // Pitch
+    
     /* extract latest rate K vector */
+    
+    amp_index_to_rate_K_vec(vec_, n1, n2, energy);
 
     float Wo_right;
     bool voicing_right;
 
-    amp_index_to_rate_K_vec(vec_, index);
-
     /* decode latest Wo and voicing */
 
-    if (index[3] == 0) {
+    if (pitch == 0) {
         /*
          * If pitch is zero, it is a code
          * to signal an unvoiced frame
@@ -163,7 +179,7 @@ void amp_index_to_models(MODEL models[], uint16_t index[]) {
         Wo_right = TAU / 100.0f;
         voicing_right = false;
     } else {
-        Wo_right = decode_pitch(index[3]);
+        Wo_right = decode_pitch(pitch);
         voicing_right = true;
     }
 
@@ -257,18 +273,16 @@ static void interp_para(float result[], float xp[], float yp[], int np, float x[
     }
 }
 
-static void amp_index_to_rate_K_vec(float vec_[], uint16_t index[]) {
+static void amp_index_to_rate_K_vec(float vec_[], int n1, int n2, int energy) {
     float vec_no_mean_[AMP_K];
-    int n1 = index[0];  // VQ1 Magnitude
-    int n2 = index[1];  // VQ2 Magnitude
-
+    
     for (int k = 0; k < AMP_K; k++) {
         vec_no_mean_[k] = codebook1[AMP_K * n1 + k] + codebook2[AMP_K * n2 + k];
     }
 
     post_filter_amp(vec_no_mean_);
-
-    float mean = decode_energy(index[2]);     // 4 bits
+    
+    float mean = decode_energy(energy);     // 4 bits
 
     for (int k = 0; k < AMP_K; k++) {
         vec_[k] = vec_no_mean_[k] + mean;
@@ -336,8 +350,8 @@ static void rate_K_mbest_encode(float vec_no_mean[], uint16_t index[]) {
         mbest_search(codebook2, target, mbest_stage2, entry);
     }
 
-    index[0] = mbest_stage2->list[0].index[1];
-    index[1] = mbest_stage2->list[0].index[0];
+    index[0] = (9 << 12) | mbest_stage2->list[0].index[1];
+    index[1] = (9 << 12) | mbest_stage2->list[0].index[0];
 
     mbest_destroy(mbest_stage1);
     mbest_destroy(mbest_stage2);

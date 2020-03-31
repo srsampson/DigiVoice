@@ -27,9 +27,9 @@ extern "C" {
 #define ENERGY_M    16
 
 uint16_t encode_energy(float);
-float decode_energy(uint16_t);
+float decode_energy(int);
 uint16_t encode_pitch(float);
-float decode_pitch(uint16_t);
+float decode_pitch(int);
 
 #ifdef __cplusplus
 }

@@ -116,8 +116,8 @@ uint16_t encode_energy(float energy) {
     return bestindex & 0x0F;   // 4 bits
 }
 
-float decode_energy(uint16_t index) {
-    return Energy_table[index & 0x0F];   // 4 bits
+float decode_energy(int energy) {
+    return Energy_table[energy];   // 4 bits
 }
 
 uint16_t encode_pitch(float wo) {
@@ -133,6 +133,6 @@ uint16_t encode_pitch(float wo) {
     return index & 0x3F;    // 6 bits
 }
 
-float decode_pitch(uint16_t index) {
-    return Pitch_table[index & 0x3F];    // 6 bits
+float decode_pitch(int pitch) {
+    return Pitch_table[pitch];    // 6 bits
 }
