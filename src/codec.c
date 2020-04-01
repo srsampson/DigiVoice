@@ -44,6 +44,10 @@ void codec_destroy() {
     nlp_destroy();
 }
 
+int codec_bits_per_frame() {
+    return 28;
+}
+
 int codec_indexes_per_frame() {
     return 4;
 }

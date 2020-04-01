@@ -42,30 +42,35 @@ A Pitch of 0 means it is an unvoiced frame
 ```
 int codec_create(void);
 ```
-Returns 0 on success, -1 if the Sinusoidal process init fails, and -2 if the Non Linear Pitch (NLP) init fails
+Returns 0 on success, -1 if the Sinusoidal process init fails, and -2 if the Non Linear Pitch (NLP) init fails.   
 ```
 void codec_destroy(void);
 ```
-Always call this function before ending vocoder processing, which releases allocated memory.
+Always call this function before ending vocoder processing, which releases allocated memory.   
 ```
 void codec_encode(uint16_t [], int16_t []);
 ```
 Called with a buffer of 320 16-bit signed PCM samples with an 8 kHz sample rate.   
-Returns a buffer of four indexed integers containing quantized speech-vocoder data.
+Returns a buffer of four indexed integers containing quantized speech-vocoder data.   
 ```
 void codec_decode(int16_t [], uint16_t []);
 ```
 Called with a buffer of four indexed integers of quantized speech-vocoder data.   
-Returns a buffer of 320 16-bit signed PCM samples with an 8 kHz sample rate.
+Returns a buffer of 320 16-bit signed PCM samples with an 8 kHz sample rate.   
+```
+int codec_bits_per_frame(void)
+```
+Always returns the number 28.   
 ```
 int codec_indexes_per_frame(void);
 ```
-Always returns the number 4.
+Always returns the number 4.   
 ```
 int codec_samples_per_frame(void);
 ```
-Always returns the number 320.
+Always returns the number 320.   
 ```
 float codec_get_energy(uint16_t []);
 ```
-Returns the mean energy of the given buffer of indexed quantized integers.
+Returns the mean energy of the given buffer of indexed quantized integers.   
+

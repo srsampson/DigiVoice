@@ -24,6 +24,7 @@ void codec_encode(uint16_t [], int16_t []);
 void codec_decode(int16_t [], uint16_t []);
 float codec_get_energy(uint16_t []);
 
+int codec_bits_per_frame(void);
 int codec_indexes_per_frame(void);
 int codec_samples_per_frame(void);
 
