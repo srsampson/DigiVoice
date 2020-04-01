@@ -30,6 +30,7 @@ Decoding the array of integers into PCM time samples, uses a similar procedure. 
 This library is being used where compatability with the original is not the primary goal. The different FFT and rounding precision of this version, produces differences which sound and look about the same.
 
 #### Binary Array Format
+Instead of using a compressed binary data exchange format, I have developed a simple array of values. Then I encode the number of bits into the four MSB. You can have up to 12-bits for each codec parameter, for future codec versions.
 ```
 The indexed values are encoded into 16 bits:
 [xxxx | yyyy yyyy yyyy ] Where x = number of bits, and y = the bits themselves
