@@ -31,13 +31,10 @@ This library is being used where compatability with the original is not the prim
 
 #### Binary Array Format
 ```
-The indexed values are encoded into 16 bits:
-[xxxx | yyyy yyyy yyyy ] Where x = number of bits, and y = the bits themselves
-
-Index 0 VQ Magnitude index 1     (9 bits)
-Index 1 VQ Magnitide index 2     (9 bits)
-Index 2 Quantized energy         (4 bits)
-Index 3 Quantized pitch          (6 bits)
+Index 1 VQ Magnitude index 1     (9 bits)
+Index 2 VQ Magnitide index 2     (9 bits)
+Index 3 Quantized energy         (4 bits)
+Index 4 Quantized pitch          (6 bits)
 
 A Pitch of 0 means it is an unvoiced frame
 ```
